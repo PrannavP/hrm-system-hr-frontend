@@ -1,28 +1,92 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { UserProvider } from './context/UserContext';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { UserProvider } from "./context/UserContext";
 
-import '../src/styles/main.css';
+import "../src/styles/main.css";
 
-import LoginPage from './pages/LoginPage';
+import LoginPage from "./pages/LoginPage";
 import IndexPage from "./pages/Dashboard/IndexPage";
-import EmployeePage from './pages/Employees/EmployeesPage';
+import EmployeePage from "./pages/Employees/EmployeesPage";
+import EmployeeDetailsPage from "./pages/EmployeeDetails/EmployeeDetailsPage";
+import CreateEmployeePage from "./pages/Employees/CreateEmployeePage";
+import EditEmployeePage from "./pages/Employees/EditEmployeePage";
+
+import NotFoundPage from "./pages/NotFound/NotFoundPage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LeavesPage from "./pages/Leaves/LeavesPage";
+import TasksPage from "./pages/Tasks/TasksPage";
 
 const App = () => {
-    return(
-        <UserProvider>
-            <Router>
-                <Routes>
-                    <Route path='/login' element={<LoginPage />} />
+	return (
+		<UserProvider>
+			<Router>
+				<Routes>
+					{/* Public Route */}
+					<Route path="/login" element={<LoginPage />} />
 
-                    <Route path='/' element={<IndexPage />} />
+					{/* Protected Routes */}
+					<Route
+						path="/"
+						element={
+							<ProtectedRoute>
+								<IndexPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/employees"
+						element={
+							<ProtectedRoute>
+								<EmployeePage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/employee/:id"
+						element={
+							<ProtectedRoute>
+								<EmployeeDetailsPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/add-employee"
+						element={
+							<ProtectedRoute>
+								<CreateEmployeePage />
+							</ProtectedRoute>
+						}
+					/>
 
-                    <Route path='/employees' element={<EmployeePage />} />
-
-                    <Route path='*' element={<h1>Page Not Found</h1>} />
-                </Routes>
-            </Router>
-        </UserProvider>
-    );
+					<Route
+						path="/edit-employee/:id"
+						element={
+							<ProtectedRoute>
+								<EditEmployeePage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/leaves"
+						element={
+							<ProtectedRoute>
+								<LeavesPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/tasks"
+						element={
+							<ProtectedRoute>
+								<TasksPage />
+							</ProtectedRoute>
+						}
+					/>
+					{/* Catch-All Route */}
+					<Route path="*" element={<NotFoundPage />} />
+				</Routes>
+			</Router>
+		</UserProvider>
+	);
 };
 
 export default App;

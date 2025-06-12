@@ -43,7 +43,7 @@ const SideNavBar = () => {
                         </Link>
                     </li>
                     <li className="mb-4">
-                        <Link to="/leave" className="flex items-center text-lg font-medium hover:text-gray-500">
+                        <Link to="/leaves" className="flex items-center text-lg font-medium hover:text-gray-500">
                             <RxCalendar className="mr-2 text-black" />
                             Leave Management
                         </Link>

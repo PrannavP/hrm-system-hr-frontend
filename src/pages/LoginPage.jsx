@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { hrLogin } from '../services/api';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import { hrLogin } from "../services/api";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
-    const [form, setForm] = useState({ email: '', password: '' });
+    const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState({});
-    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
-        checkIfLoggedIn();
-    }, []);
-
-    const checkIfLoggedIn = () => {
-        if (localStorage.getItem('token')) {
-            window.location.href = "/";
+        const token = localStorage.getItem("token");
+        if (token) {
+            navigate("/", { replace: true });
         }
-    };
+    }, [navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const newErrors = {};
 
         if (!form.email) {
-            newErrors.email = 'Email is required';
+            newErrors.email = "Email is required";
         }
 
         if (!form.password) {
-            newErrors.password = 'Password is required';
+            newErrors.password = "Password is required";
         }
 
         if (Object.keys(newErrors).length > 0) {
@@ -39,43 +37,31 @@ const LoginPage = () => {
             const response = await hrLogin(form.email, form.password);
             if (response.status === 200) {
                 localStorage.setItem("token", response.data.token);
-                
-                setMessage(response.data.message);
-
                 toast.success(response.data.message);
-
                 setTimeout(() => {
-                    window.location.href = "/";
+                    navigate("/", { replace: true });
                 }, 2000);
             } else {
                 toast.error(response.data.message);
-                setMessage(response.data.message);
             }
         } catch (err) {
-            toast.error(err);
-            console.log(err);
+            toast.error("Login failed. Please try again.");
+            console.error(err);
         }
 
-        setForm({ email: '', password: '' });
+        setForm({ email: "", password: "" });
         setErrors({});
     };
 
     const handleChange = (e) => {
         const { id, value } = e.target;
         setForm((prevForm) => ({ ...prevForm, [id]: value }));
-        setErrors((prevErrors) => ({ ...prevErrors, [id]: '' }));
+        setErrors((prevErrors) => ({ ...prevErrors, [id]: "" }));
     };
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                newestOnTop={true}
-                closeOnClick={true}
-                rtl={false}
-                theme="light"
-            />
+            <ToastContainer position="top-right" autoClose={5000} />
             <div className="max-w-md w-full mx-auto p-6 bg-white rounded-2xl shadow-lg">
                 <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">HR Sign In</h2>
                 <form onSubmit={handleSubmit}>
@@ -88,7 +74,9 @@ const LoginPage = () => {
                             id="email"
                             value={form.email}
                             onChange={handleChange}
-                            className={`w-full px-4 py-2 border rounded-md shadow focus:ring focus:ring-blue-200 focus:border-blue-500 ${errors.email ? 'border-red-500' : ''}`}
+                            className={`w-full px-4 py-2 border rounded-md shadow focus:ring focus:ring-blue-200 focus:border-blue-500 ${
+                                errors.email ? "border-red-500" : ""
+                            }`}
                             placeholder="name@company.com"
                         />
                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
@@ -102,7 +90,9 @@ const LoginPage = () => {
                             id="password"
                             value={form.password}
                             onChange={handleChange}
-                            className={`w-full px-4 py-2 border rounded-md shadow focus:ring focus:ring-blue-200 focus:border-blue-500 ${errors.password ? 'border-red-500' : ''}`}
+                            className={`w-full px-4 py-2 border rounded-md shadow focus:ring focus:ring-blue-200 focus:border-blue-500 ${
+                                errors.password ? "border-red-500" : ""
+                            }`}
                             placeholder="Enter your password"
                         />
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
