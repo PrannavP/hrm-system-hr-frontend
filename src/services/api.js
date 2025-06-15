@@ -1,10 +1,16 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api";
+// const API_URL = "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL;
 
 // login HR api call function
 export const hrLogin = async (email, password) => {
 	return axios.post(`${API_URL}/login-hr`, { email, password });
+};
+
+// fetch all employees basic details
+export const employeesBasicDetails = async () => {
+	return axios.get(`${API_URL}/get-employee-basic_details`);
 };
 
 // fetch all employees list api function
@@ -101,4 +107,9 @@ export const updateTaskField = async (taskId, field, value) => {
 		field,
 		value,
 	});
+};
+
+// Get task by id
+export const getTaskById = async (taskId) => {
+	return axios.get(`${API_URL}/tasks/get-task/${taskId}`);
 };

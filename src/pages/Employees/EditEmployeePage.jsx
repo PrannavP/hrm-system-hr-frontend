@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import SideNavBar from "../../components/SideNavBar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,7 +7,6 @@ import { employeeDetail } from "../../services/api";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
 	firstName: Yup.string().required("First Name is required"),

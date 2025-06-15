@@ -12,8 +12,12 @@ import EditEmployeePage from "./pages/Employees/EditEmployeePage";
 
 import NotFoundPage from "./pages/NotFound/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 import LeavesPage from "./pages/Leaves/LeavesPage";
+
 import TasksPage from "./pages/Tasks/TasksPage";
+import CreateTaskPage from "./pages/Tasks/CreateTaskPage";
+import EditTaskPage from "./pages/Tasks/EditTaskPage";
 
 const App = () => {
 	return (
@@ -78,6 +82,22 @@ const App = () => {
 						element={
 							<ProtectedRoute>
 								<TasksPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/create-task"
+						element={
+							<ProtectedRoute>
+								<CreateTaskPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/edit-task/:id"
+						element={
+							<ProtectedRoute>
+								<EditTaskPage />
 							</ProtectedRoute>
 						}
 					/>
