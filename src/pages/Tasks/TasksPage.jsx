@@ -74,8 +74,10 @@ const TasksPage = () => {
 
 	return (
 		<div className="flex" onClick={closePopup}>
-			<SideNavBar />
-			<div className="flex-1 p-8 relative">
+            <div className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-10">
+                <SideNavBar />
+            </div>
+			<div className="flex-1 ml-60 p-8 relative">
 				<ToastContainer
 					position="top-right"
 					autoClose={2000}

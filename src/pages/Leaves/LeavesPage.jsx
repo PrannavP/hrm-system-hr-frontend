@@ -101,7 +101,7 @@ const LeavesPage = () => {
 			</div>
 
 			{/* Main Content */}
-			<div className="flex-1 ml-64 p-8 min-h-screen">
+			<div className="flex-1 ml-60 p-8 min-h-screen">
 				<h1 className="text-2xl font-bold mb-6">
 					Employee Leave Requests
 				</h1>

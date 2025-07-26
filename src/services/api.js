@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API_URL = "http://localhost:5000/api";
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://localhost:5000/api";
+// const API_URL = import.meta.env.VITE_API_URL;
 
 // login HR api call function
 export const hrLogin = async (email, password) => {
@@ -112,4 +112,19 @@ export const updateTaskField = async (taskId, field, value) => {
 // Get task by id
 export const getTaskById = async (taskId) => {
 	return axios.get(`${API_URL}/tasks/get-task/${taskId}`);
+};
+
+// Get dashboard card (employees list)
+export const getDashboardEmployeesList = async() => {
+	return axios.get(`${API_URL}/hr/dashboard/RecentlyJoinedEmployees`);
+};
+
+// Get dashboard card (active tasks list)
+export const getDashboardActiveTasksList = async() => {
+	return axios.get(`${API_URL}/hr/dashboard/ActiveTasks`);
+};
+
+// Get dashboard card (employees on leave list)
+export const getDashboardEmployeesOnLeaveList = async() => {
+	return axios.get(`${API_URL}/hr/dashboard/EmployeesOnLeave`);
 };

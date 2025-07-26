@@ -19,6 +19,8 @@ import TasksPage from "./pages/Tasks/TasksPage";
 import CreateTaskPage from "./pages/Tasks/CreateTaskPage";
 import EditTaskPage from "./pages/Tasks/EditTaskPage";
 
+import AttritionPredictionPage from "./pages/AttritionPrediction/AttritionPredictionPage";
+
 const App = () => {
 	return (
 		<UserProvider>
@@ -98,6 +100,14 @@ const App = () => {
 						element={
 							<ProtectedRoute>
 								<EditTaskPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/predict-attrition"
+						element={
+							<ProtectedRoute>
+								<AttritionPredictionPage />
 							</ProtectedRoute>
 						}
 					/>

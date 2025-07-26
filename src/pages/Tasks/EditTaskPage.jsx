@@ -125,8 +125,10 @@ const EditTaskPage = () => {
 
 	return (
 		<div className="flex min-h-screen bg-gray-50">
-			<SideNavBar />
-			<div className="flex-1 p-8">
+            <div className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-10">
+                <SideNavBar />
+            </div>
+			<div className="flex-1 ml-60 p-8">
 				<ToastContainer position="top-right" autoClose={2000} />
 				<div className="flex items-center mb-6">
 					<button
