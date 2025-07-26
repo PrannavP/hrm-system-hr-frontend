@@ -65,7 +65,6 @@ const TasksPage = () => {
 		setPopupPosition({ x, y });
 		setSelectedTasks(task);
 		setPopupVisible(true);
-		console.log(task);
 	};
 
 	const closePopup = () => {
@@ -75,19 +74,21 @@ const TasksPage = () => {
 
 	return (
 		<div className="flex" onClick={closePopup}>
-			<SideNavBar />
-			<div className="flex-1 p-8 relative">
+            <div className="fixed top-0 left-0 h-full w-64 bg-white shadow-md z-10">
+                <SideNavBar />
+            </div>
+			<div className="flex-1 ml-60 p-8 relative">
 				<ToastContainer
 					position="top-right"
 					autoClose={2000}
 					closeOnClick={true}
 				/>
-				{/* Header with Add Employee Button */}
+				{/* Header with Create Task Button */}
 				<div className="flex items-center justify-between mb-6">
 					<h1 className="text-2xl font-bold">Tasks List</h1>
 					<button
 						className="bg-black text-white px-4 py-2 rounded-lg shadow hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 font-semibold"
-						onClick={() => (window.location.href = "/add-employee")}
+						onClick={() => (window.location.href = "/create-task")}
 					>
 						+ Create Tasks
 					</button>
@@ -195,7 +196,7 @@ const TasksPage = () => {
 						<ul className="py-1">
 							<li>
 								<Link
-									// to={`/employee/${selectedTaskselectedTasks?.emp_id}`}
+									// to={`/edit/${selectedTaskselectedTasks?.emp_id}`}
 									className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								>
 									View Tasks
@@ -203,7 +204,10 @@ const TasksPage = () => {
 							</li>
 							<li>
 								<Link
-									// to={`/edit-employee/${selectedEmployee?.emp_id}`}
+									onClick={() =>
+										console.log(selectedTasks.id)
+									}
+									to={`/edit-task/${selectedTasks?.id}`}
 									className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
 								>
 									Edit
