@@ -128,3 +128,8 @@ export const getDashboardActiveTasksList = async() => {
 export const getDashboardEmployeesOnLeaveList = async() => {
 	return axios.get(`${API_URL}/hr/dashboard/EmployeesOnLeave`);
 };
+
+// Get employeees attendance for HR Attendance page
+export const getEmployeesAttendance = async () => {
+	return axios.get(`${API_URL}/hr/EmployeesAttendance`);
+};
