@@ -20,6 +20,8 @@ import CreateTaskPage from "./pages/Tasks/CreateTaskPage";
 import EditTaskPage from "./pages/Tasks/EditTaskPage";
 
 import AttritionPredictionPage from "./pages/AttritionPrediction/AttritionPredictionPage";
+import AttendancePage from "./pages/Attendance/AttendancePage";
+import PerformanceEvaluationPage from "./pages/PerformanceEvaluation/PerformanceEvaluationPage";
 
 const App = () => {
 	return (
@@ -104,10 +106,26 @@ const App = () => {
 						}
 					/>
 					<Route
+						path="/attendance"
+						element={
+							<ProtectedRoute>
+								<AttendancePage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
 						path="/predict-attrition"
 						element={
 							<ProtectedRoute>
 								<AttritionPredictionPage />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="/performance-evaluation"
+						element={
+							<ProtectedRoute>
+								<PerformanceEvaluationPage />
 							</ProtectedRoute>
 						}
 					/>

@@ -49,9 +49,15 @@ const SideNavBar = () => {
                         </Link>
                     </li>
                     <li className="mb-4">
-                        <Link to="/leave" className="flex items-center text-lg font-medium hover:text-gray-500">
+                        <Link to="/performance-evaluation" className="flex items-center text-lg font-medium hover:text-gray-500">
                             <RxCalendar className="mr-2 text-black" />
-                            Analytics
+                            Performance Evaluate
+                        </Link>
+                    </li>
+                    <li className="mb-4">
+                        <Link to="/predict-attrition" className="flex items-center text-lg font-medium hover:text-gray-500">
+                            <RxCalendar className="mr-2 text-black" />
+                            Attrition Prediction
                         </Link>
                     </li>
                 </ul>
