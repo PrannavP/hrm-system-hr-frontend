@@ -4,6 +4,9 @@ import { getEmployeesAttendance } from "../../services/api";
 
 const AttendancePage = () => {
     const [employeesAttendanceData, setEmployeesAttendanceData] = useState([]);
+    const [filteredAttendance, setFilteredAttendance] = useState([]);
+    const [search, setSearch] = useState("");
+    const [statusSort, setStatusSort] = useState(null); // null, 'asc', 'desc'
 
     useEffect(() => {
         fetchEmployeesAttendanceList();
@@ -18,6 +21,25 @@ const AttendancePage = () => {
             setEmployeesAttendanceData([]);
         }
     };
+
+    // Filter and sort
+    useEffect(() => {
+        let filtered = employeesAttendanceData;
+        if (search.trim() !== "") {
+            filtered = filtered.filter((att) =>
+                `${att.first_name} ${att.last_name}`.toLowerCase().includes(search.trim().toLowerCase())
+            );
+        }
+        if (statusSort) {
+            const statusOrder = { Present: 2, Absent: 1 };
+            filtered = [...filtered].sort((a, b) => {
+                const aVal = statusOrder[a.status] || 0;
+                const bVal = statusOrder[b.status] || 0;
+                return statusSort === "asc" ? aVal - bVal : bVal - aVal;
+            });
+        }
+        setFilteredAttendance(filtered);
+    }, [search, employeesAttendanceData, statusSort]);
 
     // Helper to format date
     const formatDate = (dateString) => {
@@ -52,6 +74,12 @@ const AttendancePage = () => {
         return `${seconds} sec`;
     };
 
+    const handleStatusSort = () => {
+        setStatusSort((prev) =>
+            prev === "asc" ? "desc" : prev === "desc" ? null : "asc"
+        );
+    };
+
     return (
         <div className="flex">
             {/* Fixed SideNavBar */}
@@ -61,7 +89,17 @@ const AttendancePage = () => {
 
             {/* Main Content */}
             <div className="flex-1 ml-64 p-8 min-h-screen">
-                <h1 className="text-2xl font-bold mb-6">Employees Attendance</h1>
+                <div className="flex items-center justify-between mb-6">
+                    <h1 className="text-2xl font-bold">Employees Attendance</h1>
+                    <input
+                        type="text"
+                        placeholder="Search by Employee Name"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="border px-3 py-2 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-500"
+                        style={{ minWidth: 220 }}
+                    />
+                </div>
                 <div className="overflow-x-auto bg-white shadow-md rounded-lg">
                     <table className="table-auto w-full text-left border-collapse">
                         <thead>
@@ -72,12 +110,24 @@ const AttendancePage = () => {
                                 <th className="py-4 px-6">Check In</th>
                                 <th className="py-4 px-6">Check Out</th>
                                 <th className="py-4 px-6">Time Worked</th>
-                                <th className="py-4 px-6">Status</th>
+                                <th
+                                    className="py-4 px-6 cursor-pointer select-none"
+                                    onClick={handleStatusSort}
+                                    title="Sort by Status"
+                                >
+                                    Status
+                                    {statusSort === "asc" && (
+                                        <span className="ml-1">&#8593;</span>
+                                    )}
+                                    {statusSort === "desc" && (
+                                        <span className="ml-1">&#8595;</span>
+                                    )}
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="text-gray-700 text-base font-medium">
-                            {employeesAttendanceData.length > 0 ? (
-                                employeesAttendanceData.map((att) => (
+                            {filteredAttendance.length > 0 ? (
+                                filteredAttendance.map((att) => (
                                     <tr key={att.id} className="border-b border-gray-200 hover:bg-gray-50">
                                         <td className="py-4 px-6">{att.emp_id}</td>
                                         <td className="py-4 px-6">{att.first_name} {att.last_name}</td>
