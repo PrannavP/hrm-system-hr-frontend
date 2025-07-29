@@ -3,10 +3,19 @@ import SideNavBar from "../../components/SideNavBar";
 import DashboardActiveTasksListCard from "./statistics-cards/DashboardActiveTasksListCard";
 import DashboardEmployeesListCard from "./statistics-cards/DashboardEmployeesListCard";
 import DashboardEmployeesOnLeaveCard from "./statistics-cards/DashboardEmployeesOnLeaveCard";
+import { useEffect } from "react";
 
 const IndexPage = () => {
     const { user } = useUser();
     const today = new Date().toLocaleDateString();
+
+    useEffect(() => {
+        // Only refresh once per session
+        if (!window.sessionStorage.getItem("dashboardRefreshed")) {
+            window.sessionStorage.setItem("dashboardRefreshed", "true");
+            window.location.reload();
+        }
+    }, []);
 
     return (
         <div className="flex min-h-screen bg-gray-100">

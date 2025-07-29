@@ -5,6 +5,7 @@ import { useState } from "react";
 import SideNavBar from "../../components/SideNavBar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getEmployeePerformance } from "../../services/api";
 
 // Define validation schema
 const schema = yup.object().shape({
@@ -47,6 +48,7 @@ const schema = yup.object().shape({
 
 const PerformanceEvaluationPage = () => {
   const [result, setResult] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
 
   const {
     register,
@@ -59,14 +61,18 @@ const PerformanceEvaluationPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      // Call your API here
-      toast.success("Performance evaluation submitted! (API call here)");
-      setResult({ evaluation: "Good", score: 85 }); // Dummy result
-      reset();
+      const response = await getEmployeePerformance(data);
+      setResult(response.data);
+      console.log(response.data);
+      setPopupVisible(true);
+      toast.success("Performance evaluation submitted!");
+      // reset();
     } catch (err) {
       toast.error("Failed to submit evaluation.");
     }
   };
+
+  const closePopup = () => setPopupVisible(false);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -288,17 +294,35 @@ const PerformanceEvaluationPage = () => {
               {isSubmitting ? "Evaluating..." : "Evaluate Performance"}
             </button>
           </form>
-          {result && (
-            <div className="mt-6 p-4 bg-gray-100 rounded">
-              <h2 className="font-bold mb-2">Evaluation Result</h2>
-              <p>
-                <span className="font-semibold">Evaluation:</span> {result.evaluation}
-              </p>
-              <p>
-                <span className="font-semibold">Score:</span> {result.score}
-              </p>
-            </div>
-          )}
+          {/* Popup for result */}
+{popupVisible && result && (
+  <div
+    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
+    onClick={closePopup}
+  >
+    <div
+      className="bg-white rounded-2xl shadow-2xl p-10 min-w-[500px] max-w-2xl flex flex-col items-center"
+      onClick={e => e.stopPropagation()}
+    >
+      <h2 className="font-bold mb-4 text-2xl text-center">Evaluation Result</h2>
+      <p className="text-lg mb-2 text-center">
+        <span className="font-semibold">Employee ID:</span> {result.employee_id}
+      </p>
+      <p className="text-lg mb-2 text-center">
+        <span className="font-semibold">Performance Label:</span> {result.performance_label}
+      </p>
+      <p className="text-lg mb-2 text-center">
+        <span className="font-semibold">Performance Rating:</span> {result.performance_rating}
+      </p>
+      <button
+        className="mt-8 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 text-lg"
+        onClick={closePopup}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
         </div>
       </div>
     </div>

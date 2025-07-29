@@ -5,7 +5,7 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SideNavBar from "../../components/SideNavBar";
-// import { predictAttrition } from "../../services/api"; // Uncomment and implement this API call
+import { getEmployeeAttrition } from "../../services/api";
 
 const schema = yup.object().shape({
   emplyee_id: yup.string().required("Employee ID is required"),
@@ -24,6 +24,7 @@ const schema = yup.object().shape({
 
 const AttritionPredictionPage = () => {
   const [result, setResult] = useState(null);
+  const [popupVisible, setPopupVisible] = useState(false);
 
   const {
     register,
@@ -36,15 +37,19 @@ const AttritionPredictionPage = () => {
 
   const onSubmit = async (data) => {
     try {
-      // const response = await predictAttrition(data);
-      // setResult(response.data); // Adjust according to your API response
-      toast.success("Prediction submitted! (API call here)");
-      setResult({ prediction: "No Attrition", probability: 0.12 }); // Dummy result
-      reset();
+      const response = await getEmployeeAttrition(data);
+      console.log(response.data.Attrition_Risk);
+      setResult(response.data);
+      setPopupVisible(true);
+      toast.success("Prediction submitted!");
+      // reset();
     } catch (err) {
+      console.error(err);
       toast.error("Failed to predict attrition.");
     }
   };
+
+  const closePopup = () => setPopupVisible(false);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -59,7 +64,6 @@ const AttritionPredictionPage = () => {
           <h1 className="text-2xl font-bold mb-6">Attrition Prediction</h1>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* ...form fields as before... */}
               <div>
                 <label className="block font-semibold mb-1">Employee ID</label>
                 <input
@@ -201,18 +205,51 @@ const AttritionPredictionPage = () => {
               {isSubmitting ? "Predicting..." : "Predict Attrition"}
             </button>
           </form>
-          {result && (
-            <div className="mt-6 p-4 bg-gray-100 rounded">
-              <h2 className="font-bold mb-2">Prediction Result</h2>
-              <p>
-                <span className="font-semibold">Prediction:</span> {result.prediction}
-              </p>
-              <p>
-                <span className="font-semibold">Probability:</span> {result.probability}
-              </p>
-            </div>
-          )}
         </div>
+        {/* Popup for result */}
+{popupVisible && result && (
+  <div
+    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50"
+    onClick={closePopup}
+  >
+    <div
+      className="bg-white rounded-2xl shadow-2xl p-10 min-w-[400px] max-w-xl flex flex-col items-center"
+      onClick={e => e.stopPropagation()}
+    >
+      <h2 className="font-bold mb-4 text-2xl text-center">Prediction Result</h2>
+      <p className="text-lg mb-2 text-center">
+        <span className="font-semibold">Attrition Risk:</span> {result.Attrition_Risk}
+      </p>
+      {result.Attrition_Risk === "No" ? (
+        <div className="mt-6 text-center">
+          <h3 className="font-semibold mb-2 text-green-700 text-lg">Retention Tips</h3>
+          <ul className="list-disc pl-5 text-base text-gray-700 inline-block text-left">
+            <li>Continue recognizing and rewarding good performance.</li>
+            <li>Maintain open communication and regular feedback.</li>
+            <li>Support career growth and learning opportunities.</li>
+            <li>Encourage work-life balance and flexibility.</li>
+          </ul>
+        </div>
+      ) : (
+        <div className="mt-6 text-center">
+          <h3 className="font-semibold mb-2 text-red-700 text-lg">Attrition Risk Tips</h3>
+          <ul className="list-disc pl-5 text-base text-gray-700 inline-block text-left">
+            <li>Schedule a one-on-one meeting to understand concerns.</li>
+            <li>Review workload and job satisfaction factors.</li>
+            <li>Offer mentorship or additional support.</li>
+            <li>Consider incentives or recognition programs.</li>
+          </ul>
+        </div>
+      )}
+      <button
+        className="mt-8 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 text-lg"
+        onClick={closePopup}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );

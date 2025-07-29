@@ -133,3 +133,13 @@ export const getDashboardEmployeesOnLeaveList = async() => {
 export const getEmployeesAttendance = async () => {
 	return axios.get(`${API_URL}/hr/EmployeesAttendance`);
 };
+
+// Attrition Prediction API endpoint
+export const getEmployeeAttrition = async (body) => {
+    return axios.post('http://127.0.0.1:5000/predict_attrition', body);
+};
+
+// Performance Evaluation API endpoint
+export const getEmployeePerformance = async (body) => {
+    return axios.post('http://127.0.0.1:5000/evaluate', body);
+};
